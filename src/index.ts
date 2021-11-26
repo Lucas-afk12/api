@@ -2,8 +2,9 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
-/* eslint linebreak-style: ["error", "windows"] */
-import axios from 'axios';
+/* eslint linebreak-style: ["error", "unix"] */
+import axios, { AxiosRequestHeaders } from 'axios';
+import jwt_decode from 'jwt-decode';
 import { TrueManga, personal, MangaData } from './models/classes/Manga';
 import { MangaModel } from './models/MangaModel';
 
@@ -77,8 +78,8 @@ const main = async () => {
     console.log('terminado');
   };
 
-  const checker = [1010, 2106, 3252, 4211, 4100];
-  const checkValues: Array<any> = [];
+  // const checker = [1010, 2106, 3252, 4211, 4100];
+  // const checkValues: Array<any> = [];
   // await Promise.all(checker.map(async (x) => {
   //   console.log(x);
   //   await checkValues.push(await MangaModel.findOne({ 'Datos.titulo': { $eq: 'Naruto' } }));
@@ -86,14 +87,32 @@ const main = async () => {
   // if (checkValues.length <= 3) {
   //   GetMangaFromApi();
   // }
+  // console.log(checkValues)
   const user = {
     username: 'Lucasc12',
     password: 'Salmeron1-',
-    email: 'lucascoronilla@hotmail.com',
   };
+  let token : any = '';
+  let baseURL : string = '';
 
-  let token = '';
-  await axios.post('https://api.mangadex.org/auth/login', user).then((res) => token = res.data.token.session).catch((err) => console.log(err.response.data));
-  await axios.get(`https:uploads.mangadex.org:112/${token}/data/cc4c0e47e11e0cd39946fac54646f554/G1-829c1ccfa15de3804897b6d599f544d2540031839ae781117acffc54f10bb94d.png`).then((res) => console.log(res)).catch((err) => console.log(err));
+  await axios.post('https://api.mangadex.org/auth/login', user).then((res) => token = `${res.data.token.session}`).catch((err) => console.log(err.response.data));
+  await axios.get('https://api.mangadex.org/auth/check', {
+    headers: {
+      authorization: `bearer ${token}`,
+    },
+  });
+
+  await axios.get('https://api.mangadex.org/at-home/server/ca2c5daa-d7b9-4ff7-9af5-b24966c18a4f', {
+    headers: {
+      authorization: `bearer ${token}`,
+    },
+  }).then((res) => baseURL = res.data.baseUrl);
+  console.log(`${baseURL}/data-saver/901a558099f665e664a29ac63c713c71/s2-6782fe3379ea45b94afa2…527507ca4ad80709a01.jpg`);
+
+  await axios.get(`${baseURL}/data/901a558099f665e664a29ac63c713c71/s3-526efa4d0c5a92f84e112bf243b83af8cc79b7644e7ee68d62942553ef463a70.jpg`, {
+    headers: {
+      authorization: `bearer ${token}`,
+    },
+  }).then((res) => );
 };
 main();

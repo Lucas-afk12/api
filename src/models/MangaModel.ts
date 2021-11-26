@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+/* eslint linebreak-style: ["error", "unix"] */
 import { Schema, createConnection, model } from 'mongoose';
 
 const autoIncrement = require('mongoose-auto-increment');

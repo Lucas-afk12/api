@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+/* eslint linebreak-style: ["error", "unix"] */
 export interface MangaData {
     ultimoVolumen?: number;
     ultimoCapitulo?: number;
