@@ -2,9 +2,10 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
+/* eslint linebreak-style: ["error", "windows"] */
 import axios from 'axios';
-import { personal, TrueManga, MangaData } from './models/classes/manga';
-import { MangaModel } from './models/mangaModel';
+import { TrueManga, personal, MangaData } from './models/classes/Manga';
+import { MangaModel } from './models/MangaModel';
 
 // datos del manga
 const main = async () => {
@@ -14,7 +15,7 @@ const main = async () => {
     let Artista = '';
     let Autor = '';
     let Imagen = '';
-    for (let x = 0; x < 2;) {
+    for (let x = 0; x < 5;) {
       for (let i = 0; i <= 9;) {
       // eslint-disable-next-line no-await-in-loop
       // eslint-disable-next-line no-loop-func
@@ -55,7 +56,6 @@ const main = async () => {
           artista: Artista,
           autor: Autor,
           imagen: Imagen,
-          idImg: Manga.id,
 
         };
         Personal = objects;
@@ -73,19 +73,27 @@ const main = async () => {
       const saver = new MangaModel(Manga);
       await saver.save().then(() => console.log(`manga ${a} guardado`));
       a += 1;
-      console.log('terminado');
     }));
+    console.log('terminado');
   };
 
-  const checker = [1010, 1106, 1252, 1211, 1992];
+  const checker = [1010, 2106, 3252, 4211, 4100];
   const checkValues: Array<any> = [];
-  await Promise.all(checker.map(async (x) => {
-    checkValues.push(await MangaModel.find({ $_id: checker[x] }));
-  }));
-  if (checkValues.length < 3) {
-    console.log('faltan Mangas');
-    GetMangaFromApi();
-  }
-  console.log('guay');
+  // await Promise.all(checker.map(async (x) => {
+  //   console.log(x);
+  //   await checkValues.push(await MangaModel.findOne({ 'Datos.titulo': { $eq: 'Naruto' } }));
+  // }));
+  // if (checkValues.length <= 3) {
+  //   GetMangaFromApi();
+  // }
+  const user = {
+    username: 'Lucasc12',
+    password: 'Salmeron1-',
+    email: 'lucascoronilla@hotmail.com',
+  };
+
+  let token = '';
+  await axios.post('https://api.mangadex.org/auth/login', user).then((res) => token = res.data.token.session).catch((err) => console.log(err.response.data));
+  await axios.get(`https:uploads.mangadex.org:112/${token}/data/cc4c0e47e11e0cd39946fac54646f554/G1-829c1ccfa15de3804897b6d599f544d2540031839ae781117acffc54f10bb94d.png`).then((res) => console.log(res)).catch((err) => console.log(err));
 };
 main();
