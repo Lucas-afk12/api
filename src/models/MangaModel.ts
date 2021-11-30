@@ -18,4 +18,4 @@ autoIncrement.initialize(connection);
 
 MangaSchema.plugin(autoIncrement.plugin, 'Mangas');
 
-export const MangaModel = connection.model('Mangas',MangaSchema)
+export const MangaModel = connection.model('Mangas', MangaSchema);
